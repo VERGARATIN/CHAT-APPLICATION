@@ -1,0 +1,4 @@
+1. Run the ServerChat pressing Shift + F6
+2. Run the ClientChat pressing Shift + F6
+3. Then communicate with each other both Server and Client
+4. Click Exit if you want to end the conversation
