@@ -1,0 +1,164 @@
+//Press Shift + F6 to run the program
+package defenceyourchatapp;
+
+import javax.swing.*;
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
+
+public class ClientChat extends javax.swing.JFrame {
+
+    static Socket socket;
+    static DataInputStream dinStream;
+    static DataOutputStream doutStream;
+
+    public ClientChat() {
+        initComponents();
+    }
+
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        messageArea = new javax.swing.JTextArea();
+        messageText = new javax.swing.JTextField();
+        messageSend = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        exitButton = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
+
+        messageArea.setColumns(20);
+        messageArea.setRows(5);
+        jScrollPane1.setViewportView(messageArea);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(6, 41, 387, 300);
+        getContentPane().add(messageText);
+        messageText.setBounds(6, 347, 387, 32);
+
+        messageSend.setText("SEND");
+        messageSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                messageSendActionPerformed(evt);
+            }
+        });
+        getContentPane().add(messageSend);
+        messageSend.setBounds(171, 391, 62, 23);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setText("CLIENT");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(178, 14, 42, 15);
+
+        exitButton.setBackground(new java.awt.Color(0, 153, 153));
+        exitButton.setForeground(new java.awt.Color(153, 0, 0));
+        exitButton.setText("EXIT");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(exitButton);
+        exitButton.setBounds(340, 7, 53, 28);
+
+        jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\Mikuuitou\\Downloads\\Wallpaper.jpg")); // NOI18N
+        jLabel3.setText("jLabel3");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(-10, -10, 410, 430);
+
+        pack();
+    }// </editor-fold>                        
+
+    private void messageSendActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO ADD YOUR HANDLING CODE HERE:
+
+        try {
+            String user = "Me";
+            String message;
+            message = messageText.getText();
+            doutStream.writeUTF(message);
+            messageText.setText("");
+            messageArea.setText(messageArea.getText() + "\n" + user + ": " + message);
+
+        } catch (Exception e) {
+            //Handle the exception here
+        }
+    }                                           
+
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        //EXIT BUTTON
+        //ADD YOUR HANDLING CODE HERE:
+        JFrame frame = new JFrame("EXIT");
+        if (JOptionPane.showConfirmDialog(frame, "Confirm if you want to Exit", "EXIT",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
+            System.exit(0);
+        }
+    }                                          
+
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        //java.util.logging.Logger.getLogger(ServerChat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ClientChat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ClientChat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ClientChat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ClientChat.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //USERNAME INPUT
+        Scanner miku = new Scanner(System.in);
+        String user;
+
+        System.out.print("Enter a username for the server : ");
+        user = miku.next();
+        /* CREATE AND DISPLAY THE FORM */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ClientChat().setVisible(true);
+            }
+        });
+        try {
+            String messageInput = "";
+            socket = new Socket("127.0.0.1", 1908); //IP & PORT
+            dinStream = new DataInputStream(socket.getInputStream());
+            doutStream = new DataOutputStream(socket.getOutputStream());
+
+            while (!messageInput.equals("EXIT")) {
+                messageInput = dinStream.readUTF();
+                messageArea.setText(messageArea.getText() + "\n" + user + ": " + messageInput);
+
+            }
+
+        } catch (Exception e) {
+            //HANDLE EXCEPTIONS HERE
+        }
+    }
+
+    // Variables declaration - do not modify                     
+    private javax.swing.JButton exitButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private static javax.swing.JTextArea messageArea;
+    private javax.swing.JButton messageSend;
+    private javax.swing.JTextField messageText;
+    // End of variables declaration                   
+}
