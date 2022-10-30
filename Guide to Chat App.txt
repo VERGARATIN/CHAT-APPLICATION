@@ -1,0 +1,5 @@
+1.Import the code to Java Netbeans or Eclipse
+2. Run the ServerChatClass pressing Shift + F6
+3. Run the ClientChatClass pressing Shift + F6
+4. Then communicate with each other both Server and Client
+5. Click Exit if you want to end the conversation
